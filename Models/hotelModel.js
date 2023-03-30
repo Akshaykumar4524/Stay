@@ -18,7 +18,7 @@ const hotelSchema = mongoose.Schema({
     type: Number,
     required: true,
     unique: true,
-    length: 10,
+    validate:[validator.length==10],
   },
   Address: {
     type: String,
