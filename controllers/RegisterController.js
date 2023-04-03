@@ -25,11 +25,16 @@ exports.Register = async (req, res) => {
           PhoneNo,
           Password: await bcrypt.hash(Password, 10),
         });
-        const dataToSave = await data.save();
-        res.status(200).json({
-          status: "Success",
-          message: `Successfully Registered with UserId ${dataToSave.UserId}`,
+        await data.save().then((result)=>{
+          res.status(200).json({
+            status: "Success",
+            message: `Successfully Registered with UserId ${result.UserId}`,
+          });
+        },
+        (error)=>{
+          res.status(400).json({ status: "Error", message: error.errors });
         });
+        
       });
     }
   } catch (error) {

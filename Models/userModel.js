@@ -5,12 +5,12 @@ const userSchema = mongoose.Schema({
   UserId: {
     required: [true,"Required"],
     type: Number,
-    unique: true,
+    unique: [true,'this Id already exist'],
   },
   Name: {
     required: [true,"Required"],
     type: String,
-    min: [3, "Invalid Name"],
+    minlength: [3, "Invalid Name"],
   },
   Address: {
     required: [true,"Required"],
@@ -20,19 +20,20 @@ const userSchema = mongoose.Schema({
     type: String,
     required: [true,"Required"],
     validate: [validator.isEmail, "invalid email"],
-    unique: true,
+    unique: [true,'this email already exist'],
   },
   PhoneNo: {
     type: Number,
     required: [true,"Required"],
-    unique: true,
-    length: [10, "Invalid Phone No"],
+    unique: [true,'this phoneNo already exist'],
+    min: [10, "Invalid Phone No"],
+    max: [10, "Invalid Phone No"],
   },
   Password: {
     type: String,
     required: [true,"Required"],
-    min: [8, "Please Enter a password greater than or equal to 8"],
-    max: [12, "Please Enter a password less than or equal to 12"],
+    minlength: [8, "Please Enter a password greater than or equal to 8"],
+    maxlength: [12, "Please Enter a password less than or equal to 12"],
   },
   UserBookings: {
     type: Array,
