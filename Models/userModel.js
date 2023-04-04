@@ -26,14 +26,11 @@ const userSchema = mongoose.Schema({
     type: Number,
     required: [true,"Required"],
     unique: [true,'this phoneNo already exist'],
-    min: [10, "Invalid Phone No"],
-    max: [10, "Invalid Phone No"],
+    min: [999999999, "Invalid Phone No"],
   },
   Password: {
     type: String,
     required: [true,"Required"],
-    minlength: [8, "Please Enter a password greater than or equal to 8"],
-    maxlength: [12, "Please Enter a password less than or equal to 12"],
   },
   UserBookings: {
     type: Array,
