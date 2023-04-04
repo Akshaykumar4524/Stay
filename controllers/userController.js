@@ -1,3 +1,4 @@
+const userModel = require("../Models/userModel");
 const UserModel = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 
@@ -34,26 +35,20 @@ exports.Register = async (req, res) => {
           },
           (error) => {
             if (error.errors["Name"]) {
-              res
-                .status(400)
-                .json({
-                  status: "Error",
-                  message: error.errors["Name"].message,
-                });
+              res.status(400).json({
+                status: "Error",
+                message: error.errors["Name"].message,
+              });
             } else if (error.errors["PhoneNo"]) {
-              res
-                .status(400)
-                .json({
-                  status: "Error",
-                  message: error.errors["PhoneNo"].message,
-                });
+              res.status(400).json({
+                status: "Error",
+                message: error.errors["PhoneNo"].message,
+              });
             } else if (error.errors["EmailId"]) {
-              res
-                .status(400)
-                .json({
-                  status: "Error",
-                  message: error.errors["EmailId"].message,
-                });
+              res.status(400).json({
+                status: "Error",
+                message: error.errors["EmailId"].message,
+              });
             } else {
               res.status(400).json({ status: "Error", message: error.errors });
             }
@@ -76,4 +71,28 @@ let generateUserId = async () => {
   }
 };
 
-exports.Login = async (req, res) => {};
+exports.Login = async (req, res) => {
+  const { EmailId, Password } = req.body;
+  try {
+    const user = await userModel.findOne({ EmailId });
+    if (user) {
+      const check = await bcrypt.compare(Password, user.Password);
+      if (check) {
+        res.cookie("UserName", user.Name);
+        res
+          .status(200)
+          .json({ status: "Success", message: "Login SuccessFull" });
+      } else {
+        res
+          .status(400)
+          .json({ status: "Error", message: "Please Check your password" });
+      }
+    } else {
+      res
+        .status(400)
+        .json({ status: "Error", message: "Please enter valid EmailId" });
+    }
+  } catch (error) {
+    res.status(400).json({ status: "Error", message: error.message });
+  }
+};

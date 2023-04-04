@@ -26,7 +26,8 @@ const userSchema = mongoose.Schema({
     type: Number,
     required: [true,"Required"],
     unique: [true,'this phoneNo already exist'],
-    min: [999999999, "Invalid Phone No"],
+    min: [999999999, "Invalid Phone No please enter 10 digit number"],
+    max: [9999999999, "Invalid Phone No please enter 10 digit number"],
   },
   Password: {
     type: String,
