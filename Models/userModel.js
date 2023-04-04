@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
   Name: {
     required: [true,"Required"],
     type: String,
-    minlength: [3, "Invalid Name"],
+    minlength: [3, "Enter a Valid Name with at least 3 characters"],
   },
   Address: {
     required: [true,"Required"],
