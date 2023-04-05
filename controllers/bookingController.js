@@ -30,7 +30,11 @@ exports.bookHotel = async (req, res) => {
 
     if (check) {
       await data.save().then(
-        (response) => {
+        async (response) => {
+          const user = await userModel.findOne({ UserId });
+          user.UserBookings.push(response.BookingId);
+          const UserBookings = user.UserBookings;
+          await userModel.findOneAndUpdate({ UserId }, { UserBookings });
           res.status(200).json({
             ststus: "Success",
             message: `Successfully made a booking with booking id ${response.BookingId}`,
@@ -38,21 +42,25 @@ exports.bookHotel = async (req, res) => {
         },
         (error) => {
           if (error.errors["StartDate"]) {
-            res
-              .status(400)
-              .json({ status: "Error", message: error.errors["StartDate"].message });
+            res.status(400).json({
+              status: "Error",
+              message: error.errors["StartDate"].message,
+            });
           } else if (error.errors["EndDate"]) {
-            res
-              .status(400)
-              .json({ status: "Error", message: error.errors["EndDate"].message });
+            res.status(400).json({
+              status: "Error",
+              message: error.errors["EndDate"].message,
+            });
           } else if (error.errors["NoOfPersons"]) {
-            res
-              .status(400)
-              .json({ status: "Error", message: error.errors["NoOfPersons"].message });
+            res.status(400).json({
+              status: "Error",
+              message: error.errors["NoOfPersons"].message,
+            });
           } else if (error.errors["NoOfRooms"]) {
-            res
-              .status(400)
-              .json({ status: "Error", message: error.errors["NoOfRooms"].message });
+            res.status(400).json({
+              status: "Error",
+              message: error.errors["NoOfRooms"].message,
+            });
           }
         }
       );
