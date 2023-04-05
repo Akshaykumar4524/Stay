@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const hotelSchema = mongoose.Schema({
-  HotelNAme: {
+  HotelName: {
     required: true,
     type: String,
     unique: true,
@@ -18,7 +18,6 @@ const hotelSchema = mongoose.Schema({
     type: Number,
     required: true,
     unique: true,
-    validate:[validator.length==10],
   },
   Address: {
     type: String,
