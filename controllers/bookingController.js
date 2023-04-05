@@ -2,11 +2,11 @@ const bookingModel = require("../Models/bookingModel");
 const hotelModel = require("../Models/hotelModel");
 const userModel = require("../Models/userModel");
 
-const bookHotel = async (req, res) => {
+exports.bookHotel = async (req, res) => {
   try {
     const { StartDate, EndDate, NoOfPersons, NoOfRooms, TypeOfRoom } = req.body;
     const data = new bookingModel({
-      BookingId: generateBookingId(),
+      BookingId: await generateBookingId(),
       StartDate,
       EndDate,
       NoOfPersons,
@@ -47,7 +47,7 @@ const bookHotel = async (req, res) => {
 };
 
 let generateBookingId = async () => {
-  let bookingIds = await UserModel.distinct("BookingId");
+  let bookingIds = await bookingModel.distinct("BookingId");
   if (bookingIds.length) {
     let maxBookingId = Math.max(...bookingIds);
     return maxBookingId + 1;

@@ -13,10 +13,10 @@ const bookingSchema = mongoose.Schema({
   EndDate: {
     type: Date,
     required: true,
-    validate: [
-      this.StartDate <= this.EndDate,
-      "Start Date must be less than EndDate",
-    ],
+    // validate: [
+    //   this.StartDate <= this.EndDate,
+    //   "Start Date must be less than EndDate",
+    // ],
   },
   NoOfPersons: {
     type: Number,
