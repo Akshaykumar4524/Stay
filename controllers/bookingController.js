@@ -33,16 +33,32 @@ exports.bookHotel = async (req, res) => {
         (response) => {
           res.status(200).json({
             ststus: "Success",
-            data: `Successfully made a booking with booking id ${response.BookingId}`,
+            message: `Successfully made a booking with booking id ${response.BookingId}`,
           });
         },
         (error) => {
-          res.status(400).json({ ststus: "Error", data: error.errors });
+          if (error.errors["StartDate"]) {
+            res
+              .status(400)
+              .json({ status: "Error", message: error.errors["StartDate"].message });
+          } else if (error.errors["EndDate"]) {
+            res
+              .status(400)
+              .json({ status: "Error", message: error.errors["EndDate"].message });
+          } else if (error.errors["NoOfPersons"]) {
+            res
+              .status(400)
+              .json({ status: "Error", message: error.errors["NoOfPersons"].message });
+          } else if (error.errors["NoOfRooms"]) {
+            res
+              .status(400)
+              .json({ status: "Error", message: error.errors["NoOfRooms"].message });
+          }
         }
       );
     }
   } catch (error) {
-    res.status(400).json({ ststus: "Error", data: error.message });
+    res.status(400).json({ ststus: "Error", message: error.message });
   }
 };
 
