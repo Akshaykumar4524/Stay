@@ -7,3 +7,4 @@ route.post("/register", userController.Register);
 route.post("/login", userController.Login);
 route.get("/hotels", hotelController.getAllHotels);
 route.post("/hotels", hotelController.addHotel);
+route.post("/bookings/:userId/:HotelName", hotelController.addHotel);
