@@ -94,29 +94,47 @@ exports.reSchedule = async (req, res) => {
       });
     });
     if (check) {
-      await bookingModel
-        .findOneAndUpdate({ BookingId }, { StartDate, EndDate })
-        .then(
-          (response) => {
-            res.status(200).json({
-              status: "Success",
-              message: `Successfully rescheduled the booking with booking Id ${response.BookingId}`,
-            });
-          },
-          (error) => {
-            if (error.errors["StartDate"]) {
-              res.status(400).json({
-                status: "Error",
-                message: error.errors["StartDate"].message,
+      const date = new Date();
+      const start = new Date(StartDate);
+      if (!(start >= new Date())) {
+        res
+          .status(400)
+          .json({
+            status: "Error",
+            message: "Start Date should be greater than or equal to Today",
+          });
+      } else if (!(StartDate <= EndDate)) {
+        res
+          .status(400)
+          .json({
+            status: "Error",
+            message: "End Date should be greater than or equal to StartDate",
+          });
+      } else {
+        await bookingModel
+          .findOneAndUpdate({ BookingId }, { StartDate, EndDate })
+          .then(
+            (response) => {
+              res.status(200).json({
+                status: "Success",
+                message: `Successfully rescheduled the booking with booking Id ${response.BookingId}`,
               });
-            } else if (error.errors["EndDate"]) {
-              res.status(400).json({
-                status: "Error",
-                message: error.errors["EndDate"].message,
-              });
+            },
+            (error) => {
+              if (error.errors["StartDate"]) {
+                res.status(400).json({
+                  status: "Error",
+                  message: error.errors["StartDate"].message,
+                });
+              } else if (error.errors["EndDate"]) {
+                res.status(400).json({
+                  status: "Error",
+                  message: error.errors["EndDate"].message,
+                });
+              }
             }
-          }
-        );
+          );
+      }
     } else {
       res.status(400).json({
         status: "Error",
