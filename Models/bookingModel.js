@@ -39,6 +39,7 @@ function dateValidator(value) {
 }
 function dateValidatorforStart(value){
   const date = new Date();
-  return value>=date;
+  const start = new Date(value);
+  return start>=date;
 }
 module.exports = mongoose.model("booking", bookingSchema);
