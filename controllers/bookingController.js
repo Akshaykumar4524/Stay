@@ -79,3 +79,51 @@ let generateBookingId = async () => {
     return 1001;
   }
 };
+
+exports.reSchedule = async (req, res) => {
+  try {
+    const { StartDate, EndDate, BookingId } = req.body;
+    const UserId = req.params.UserId;
+
+    let check = false;
+    await userModel.findOne({ UserId }).then((response) => {
+      response.UserBookings.forEach((bookingId) => {
+        if (bookingId == BookingId) {
+          check = true;
+        }
+      });
+    });
+    if (check) {
+      await bookingModel
+        .findOneAndUpdate({ BookingId }, { StartDate, EndDate })
+        .then(
+          (response) => {
+            res.status(200).json({
+              status: "Success",
+              message: `Successfully rescheduled the booking with booking Id ${response.BookingId}`,
+            });
+          },
+          (error) => {
+            if (error.errors["StartDate"]) {
+              res.status(400).json({
+                status: "Error",
+                message: error.errors["StartDate"].message,
+              });
+            } else if (error.errors["EndDate"]) {
+              res.status(400).json({
+                status: "Error",
+                message: error.errors["EndDate"].message,
+              });
+            }
+          }
+        );
+    } else {
+      res.status(400).json({
+        status: "Error",
+        message: "invalid UserId or Bookingid",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ ststus: "Error", message: error.message });
+  }
+};

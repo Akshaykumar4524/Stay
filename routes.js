@@ -9,3 +9,4 @@ route.post("/login", userController.Login);
 route.get("/hotels", hotelController.getAllHotels);
 route.post("/hotels", hotelController.addHotel);
 route.post("/bookings/:UserId/:HotelName", bookingController.bookHotel);
+route.put("/bookings/:UserId", bookingController.reSchedule);
