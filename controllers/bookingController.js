@@ -97,19 +97,15 @@ exports.reSchedule = async (req, res) => {
       const date = new Date();
       const start = new Date(StartDate);
       if (!(start >= new Date())) {
-        res
-          .status(400)
-          .json({
-            status: "Error",
-            message: "Start Date should be greater than or equal to Today",
-          });
+        res.status(400).json({
+          status: "Error",
+          message: "Start Date should be greater than or equal to Today",
+        });
       } else if (!(StartDate <= EndDate)) {
-        res
-          .status(400)
-          .json({
-            status: "Error",
-            message: "End Date should be greater than or equal to StartDate",
-          });
+        res.status(400).json({
+          status: "Error",
+          message: "End Date should be greater than or equal to StartDate",
+        });
       } else {
         await bookingModel
           .findOneAndUpdate({ BookingId }, { StartDate, EndDate })
@@ -143,5 +139,47 @@ exports.reSchedule = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ ststus: "Error", message: error.message });
+  }
+};
+
+exports.cancelBooking = async (req, res) => {
+  try {
+    const UserId = req.params.UserId;
+    const BookingId = req.params.BookingId;
+    let check = false;
+    await userModel.findOne({ UserId }).then((response) => {
+      response.UserBookings.forEach((bookingId) => {
+        if (bookingId == BookingId) {
+          check = true;
+        }
+      });
+    });
+    if (check) {
+      await bookingModel
+        .findOneAndDelete({ BookingId })
+        .then(async (result) => {
+          await userModel.findOne({ UserId }).then(async (response) => {
+            const UserBookings = response.UserBookings.filter((bookingId) => {
+              return bookingId != BookingId;
+            });
+            await userModel.findOneAndUpdate({ UserId }, { UserBookings }).then(
+              res.status(200).json({
+                status: "Success",
+                message: `Successfully deleted booking with Booking Id ${result.BookingId}`,
+              })
+            );
+          });
+        });
+    } else {
+      res.status(400).json({
+        status: "Error",
+        message: " could not delete Booking invalid UserId or Bookingid",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      status: "Error",
+      message: error.message,
+    });
   }
 };
