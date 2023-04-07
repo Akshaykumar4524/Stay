@@ -183,3 +183,26 @@ exports.cancelBooking = async (req, res) => {
     });
   }
 };
+
+exports.getBookings = async (req,res) =>{
+  try {
+    const UserId = req.params.UserId;
+    const UserBookings =[];
+    await userModel.findOne({UserId}).then((response)=>{
+      const data = response.UserBookings;
+      if(data.length){
+        data.forEach(async (BookingId)=>{
+          await bookingModel.findOne({BookingId}).then((result)=>{
+            UserBookings.push(result);
+          })
+        }
+        )
+        res.status(200).json({status:"Success",data:UserBookings})
+      }else{
+        res.status(200).json({status:"Success",message:"No Bookings done yet"})
+      }
+    })
+  } catch (error) {
+    res.status(400).json({status:"Error",message:error.message})
+  }
+}

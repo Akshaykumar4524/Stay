@@ -11,3 +11,4 @@ route.post("/hotels", hotelController.addHotel);
 route.post("/bookings/:UserId/:HotelName", bookingController.bookHotel);
 route.put("/bookings/:UserId", bookingController.reSchedule);
 route.delete("/bookings/:UserId/:BookingId", bookingController.cancelBooking);
+route.get("/bookings/:UserId", bookingController.getBookings);
