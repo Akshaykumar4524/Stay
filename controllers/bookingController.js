@@ -194,10 +194,12 @@ exports.getBookings = async (req,res) =>{
         data.forEach(async (BookingId)=>{
           await bookingModel.findOne({BookingId}).then((result)=>{
             UserBookings.push(result);
+            if(UserBookings.length == data.length){
+              res.status(200).json({status:"Success",data:UserBookings})
+            }
           })
         }
         )
-        res.status(200).json({status:"Success",data:UserBookings})
       }else{
         res.status(200).json({status:"Success",message:"No Bookings done yet"})
       }
