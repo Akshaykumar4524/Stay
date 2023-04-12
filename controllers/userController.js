@@ -95,3 +95,12 @@ exports.Login = async (req, res) => {
     res.status(400).json({ status: "Error", message: error.message });
   }
 };
+
+exports.logout = (req, res) => {
+  try {
+    res.clearCookie("UserName");
+    res.status(200).json({ status: "Success", message: "You are Logged Out" });
+  } catch (error) {
+    res.status(400).json({ status: "Error", message: error.message });
+  }
+};

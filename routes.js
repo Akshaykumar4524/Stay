@@ -15,3 +15,4 @@ route.delete("/bookings/:UserId/:BookingId", bookingController.cancelBooking);
 route.get("/bookings/:UserId", bookingController.getBookings);
 route.post("/reviews", reviewsController.addReviews);
 route.get("/reviews/:HotelName", reviewsController.getAllReviews);
+route.get("/logout", userController.logout);
